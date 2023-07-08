@@ -35,8 +35,28 @@
      File system storage
      Block Storage
      Object Storage
-     
-     
+
+
+
+Disk is measure in IOPS(Input Output operation per second)
+
+data-transfer rate:
+the rate at which data can be retrieve
+sata is interface pc to raid controller, category which used in laptop and desktop
+current standard is 3GB
+7200 rotation per minute
+
+7200 rpm in NLSAS
+
+SAS two standard
+6 Gbps
+10k rotation per minute
+15k is standard rotation per minute
+
+
+Hot SWap is feature which will allow disk can be removed when its working and replcace with new disk, no need to turn off disk.
+
+Disk failure calculated by MTTF (mean time to failure)
 
     
      
