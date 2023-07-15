@@ -1,0 +1,79 @@
+Set 4 hdd 
+
+lsblk
+yum clean all
+yum update -y
+yum install mdadm -y
+ mdadm --create --verbose /dev/md1 --level=1 --raid-devices=2 /dev/sdb /dev/sdc
+ mdadm --create --verbose /dev/md2 --level=1 --raid-devices=2 /dev/sdd /dev/sde
+ mdadm --create --verbose /dev/md1 --level=0 --raid-devices=2 /dev/md1 /dev/md2
+
+ cat /proc/mdstat
+   mdadm --detail /dev/md0
+   fdisk  /dev/md0
+       m
+       n
+       p
+       enter
+       enter
+       enter
+       w-detail /dev/md1
+  fdisk -l
+  mkfs.ext4 /dev/md0p1
+  mkdir /mnt/raid10
+  mount /dev/md0p1 /mnt/raid10/
+  df -h
+  blkid   (we get uuid that will copied on below file)
+  vim /etc/fstab
+            UUID=4e36c3e0-b6bd-4946-83cf-eb2abb10f3ba /mnt/raid10 ext4 defaults 0 0
+  mount -a
+  cd /mnt/raid10
+  ls
+
+mdadm --stop  /dev/md0
+mdadm --remove /dev/md0
+mdadm --zero-superblock /dev/sd[c-e]
+
+
+################################################################################################
+
+
+
+LVM (Logical Volume Manager)
+
+LVM is device mapper framework provided by linux to manager disk drives.
+It provides a moe flexible way of managing disk space compared to traditional methods.
+
+Tell me 5 file system name:
+
+
+
+EXTENDING Logicak Volume
+		use the lvextend command to extensd the size of a logical volume.
+
+
+LAB
+######################################
+
+
+power off the machine and set 2 hdd of 20 GB
+Power ON
+lsblk
+you can see 
+		NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda               8:0    0   20G  0 disk
+├─sda1            8:1    0    1G  0 part /boot
+└─sda2            8:2    0   19G  0 part
+  ├─centos-root 253:0    0   17G  0 lvm  /
+  └─centos-swap 253:1    0    2G  0 lvm  [SWAP]
+sdb               8:16   0   20G  0 disk
+sdc               8:32   0   20G  0 disk
+sr0              11:0    1  973M  0 rom
+
+
+
+
+
+
+
+
