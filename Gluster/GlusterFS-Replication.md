@@ -74,5 +74,33 @@
 * mount /dev/sdb1 /mnt/disk1
 
 * yum install wget centos-release-gluster epel-release glusterfs-server -y
+* systemctl start glusterd
+* systemctl enable glusterd
+* This peer commands has to be run only on node1
+*                     gluster peer probe node2.hpcsa.in  
+                      gluster peer probe node3.hpcsa.in
+* You can check nodes are connected or not on each node.
+*                     gluster peer status  
+                      gluster pool list
+                                 [root@node1 ~]# gluster pool list
+                                                         UUID                                    Hostnam                                                                                                                                                                                              e       State
+                                                         20b22352-b3b3-4e93-a8c7-9c9961f5f977    node2.h                                                                                                                                                                                              pcsa.in Connected
+                                                         8fa9f26f-a498-469a-a186-fd1592fb6450    node3.h                                                                                                                                                                                              pcsa.in Connected
+                                                         93df272f-30e5-4503-a63b-4e0fea7d6249    localho                                                                                                                                                                                              st      Connected
+* Run Below command on all nodes.
+*                      mkdir /mnt/disk1/diskvol
+* Create and start a Gluster volume: This command creates a Gluster volume named 'gdisk1' with a replication factor of 3. It then starts the volume:
+*                      [root@node1 ~]# gluster volume create gdisk2 replica 3 node1.hpcsa.in:/mnt/disk1/diskvol/gdisk2  node2.hpcsa.in:/mnt/disk1/diskvol/gdisk2                                
+                                       node3.hpcsa.in:/mnt/disk1/diskvol/gdisk2
+	                     volume create: gdisk2: success: please start the volume to access data
 
-
+*                        [root@node1 ~]# gluster
+                           gluster               glusterd              glusterfind           glusterfs             glusterfsd            gluster-setgfid2path
+* gluster volume start gdisk2   , this command will start the gdisk.
+*                         [root@node1 ~]# gluster volume start gdisk2
+                           volume start: gdisk2: success
+                      
+* Display information about the Gluster volume: This command displays information about the 'gdisk1' volume:
+   
+                           gluster volume info gdisk1
+   
