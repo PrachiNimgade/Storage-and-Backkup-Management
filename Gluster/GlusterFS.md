@@ -7,7 +7,7 @@
     * Last machines hostname is
     *                                * client.hpcsa.in
     
-    * Add one Extra hard-disk in 3 machines.
+    * Add one Extra hard-disk in 3 Node machines of 20 GB.
 
 
  * Step 2 ON NODE 1, 2, 3
@@ -89,8 +89,9 @@
                                                          93df272f-30e5-4503-a63b-4e0fea7d6249    localho                                                                                                                                                                                              st      Connected
 * Run Below command on all nodes.
 *                      mkdir /mnt/disk1/diskvol
-* Create and start a Gluster volume: This command creates a Gluster volume named 'gdisk1' with a replication factor of 3. It then starts the volume:
-*                      [root@node1 ~]# gluster volume create gdisk2 replica 3 node1.hpcsa.in:/mnt/disk1/diskvol/gdisk2  node2.hpcsa.in:/mnt/disk1/diskvol/gdisk2                                
+* # Create and start a Gluster volume: This command creates a Gluster volume named 'gdisk1' with a replication factor of 3. It then starts the volume:
+* Below command is run only on Node 1 Machine
+*                         [root@node1 ~]# gluster volume create gdisk2 replica 3 node1.hpcsa.in:/mnt/disk1/diskvol/gdisk2  node2.hpcsa.in:/mnt/disk1/diskvol/gdisk2                                
                                        node3.hpcsa.in:/mnt/disk1/diskvol/gdisk2
 	                     volume create: gdisk2: success: please start the volume to access data
 
@@ -100,7 +101,8 @@
 *                         [root@node1 ~]# gluster volume start gdisk2
                            volume start: gdisk2: success
                       
-* Display information about the Gluster volume: This command displays information about the 'gdisk1' volume:
+* # Display information about the Gluster volume: This command displays information about the 'gdisk1' volume. Here, you can see in the type of glusterfs
+   
    
                            gluster volume info gdisk1
 		           [root@node1 ~]# gluster volume info gdisk2
@@ -145,7 +147,9 @@
 								tmpfs                     98M     0   98M   0% /run/user/0
 								node1.hpcsa.in:/gdisk2    20G  238M   20G   2% /mnt/gdrive
 * Create an empty file to replicate it in all server
-* 					[root@client ~]# dd if=/dev/zero of=file.data bs=1024 count=15
+* 					       [root@client ~]# dd if=/dev/zero of=file.data bs=1024 count=15
 						15+0 records in
 						15+0 records out
 						15360 bytes (15 kB) copied, 0.000106289 s, 145 MB/s
+
+# Disperse & Redundancy in GlusterFs
