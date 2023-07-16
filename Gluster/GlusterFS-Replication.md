@@ -103,4 +103,49 @@
 * Display information about the Gluster volume: This command displays information about the 'gdisk1' volume:
    
                            gluster volume info gdisk1
+		           [root@node1 ~]# gluster volume info gdisk2
+						Volume Name: gdisk2
+						Type: Replicate
+						Volume ID: 1c9b9440-9896-47ad-8f41-6a81c23b59fe
+						Status: Started
+						Snapshot Count: 0
+						Number of Bricks: 1 x 3 = 3
+						Transport-type: tcp
+						Bricks:
+						Brick1: node1.hpcsa.in:/mnt/disk1/diskvol/gdisk2
+						Brick2: node2.hpcsa.in:/mnt/disk1/diskvol/gdisk2
+						Brick3: node3.hpcsa.in:/mnt/disk1/diskvol/gdisk2
+						Options Reconfigured:
+						cluster.granular-entry-heal: on
+						storage.fips-mode-rchecksum: on
+						transport.address-family: inet
+						nfs.disable: on
+						performance.client-io-threads: off
+  # ON CLIENT MACHINE
+  * On the client, install glusterfs-fuse package: This package allows GlusterFS volumes to be mounted via fuse:
+  * 				[root@client ~]#  systemctl disable firewalld
+							Removed symlink /etc/systemd/system/multi-user.target.want                                                             s/firewalld.service.
+							Removed symlink /etc/systemd/system/dbus-org.fedoraproject                                                             .FirewallD1.service.
+				     [root@client ~]#  systemctl stop firewalld
+				     [root@client ~]# setenforce 0
+*					root@client ~]# yum install glusterfs-fuse
+* Create a directory for mounting the Gluster volume:
    
+  					mkdir /mnt/gdrive
+* Mount the Gluster volume on the client: This command mounts the 'gdisk1' volume to the newly created directory:
+  					mount -t glusterfs node1.hpcsa.in:/gdisk2 /mnt/gdrive
+* 					[root@client ~]# df -h
+								Filesystem               Size  Used Avail Use% Mounted on
+								devtmpfs                 475M     0  475M   0% /dev
+								tmpfs                    487M     0  487M   0% /dev/shm
+								tmpfs                    487M  7.6M  479M   2% /run
+								tmpfs                    487M     0  487M   0% /sys/fs/cgroup
+								/dev/mapper/centos-root   17G  1.5G   16G   9% /
+								/dev/sda1               1014M  138M  877M  14% /boot
+								tmpfs                     98M     0   98M   0% /run/user/0
+								node1.hpcsa.in:/gdisk2    20G  238M   20G   2% /mnt/gdrive
+* Create an empty file to replicate it in all server
+* 					[root@client ~]# dd if=/dev/zero of=file.data bs=1024 count=15
+						15+0 records in
+						15+0 records out
+						15360 bytes (15 kB) copied, 0.000106289 s, 145 MB/s
