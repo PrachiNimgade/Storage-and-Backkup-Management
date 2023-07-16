@@ -153,3 +153,83 @@
 						15360 bytes (15 kB) copied, 0.000106289 s, 145 MB/s
 
 # Disperse & Redundancy in GlusterFs
+* The redundancy value is used in the same way as for a dispersed volume.
+* The disperse count is simply the sum of the data bricks and redundancy bricks.
+# Do the Following Commands on Node 1 Only, which is our main server.
+* You just need to change gdisk number and run below commands.
+
+* 		gluster volume create gdisk3 disperse 3 redundancy 1 node1.hpcsa.in:/mnt/disk1/diskvol/gdisk3  node2.hpcsa.in:/mnt/disk1/diskvol/gdisk3  node3.hpcsa.in:/mnt/disk1/diskvol/gdisk3
+*		[root@node1 ~]#  gluster volume create gdisk3 disperse 3 redundancy 1 node1.hpcsa.in:/mnt/disk1/diskvol/gdisk3  node2.hpcsa.in:/mnt/disk1/diskvol/gdisk3  		 
+				node3.hpcsa.in:/mnt/disk1/diskvol/gdisk3
+		volume create: gdisk3: success: please start the volume to access data
+*  gluster volume info gdisk3 (you can check type of glusterfs)
+* 		[root@node1 ~]# gluster volume info gdisk3
+
+				Volume Name: gdisk3
+				Type: Disperse
+				Volume ID: 3d902fb0-e4be-4fc1-a681-d704e69809de
+				Status: Created
+				Snapshot Count: 0
+				Number of Bricks: 1 x (2 + 1) = 3
+				Transport-type: tcp
+				Bricks:
+				Brick1: node1.hpcsa.in:/mnt/disk1/diskvol/gdisk3
+				Brick2: node2.hpcsa.in:/mnt/disk1/diskvol/gdisk3
+				Brick3: node3.hpcsa.in:/mnt/disk1/diskvol/gdisk3
+				Options Reconfigured:
+				storage.fips-mode-rchecksum: on
+				transport.address-family: inet=
+				nfs.disable: on
+  # Run following commands on client machine
+* You need to create new drive, mount that drive.
+* 		[root@client ~]# mkdir /mnt/gdrive5
+
+		[root@client ~]# mount -t glusterfs node1.hpcsa.in:/gdisk5 /mnt/gdrive5
+
+		[root@client ~]# cd /mnt/gdrive5
+* Create empty file to dispers the file within nodes.
+* 		[root@client gdrive5]# dd if=/dev/zero of=file1.data bs=1024 count=204652
+					146986+0 records in
+					146986+0 records out
+					150513664 bytes (151 MB) copied, 5.66048 s, 26.6 MB/s
+*		[root@client gdrive5]# ll
+				total 2046
+				-rw-r--r--. 1 root root 2095104 Jul 15 22:39 file1.data
+				[root@client gdrive5]# df -h
+				Filesystem               Size  Used Avail Use% Mounted on
+				devtmpfs                 475M     0  475M   0% /dev
+				tmpfs                    487M     0  487M   0% /dev/shm
+				tmpfs                    487M  7.7M  479M   2% /run
+				tmpfs                    487M     0  487M   0% /sys/fs/cgroup
+				/dev/mapper/centos-root   17G  1.5G   16G   9% /
+				/dev/sda1               1014M  138M  877M  14% /boot
+				tmpfs                     98M     0   98M   0% /run/user/0
+				node1.hpcsa.in:/gdisk2    20G  239M   20G   2% /mnt/gdrive
+				node1.hpcsa.in:/gdisk5    40G  478M   40G   2% /mnt/gdrive5
+		[root@client gdrive5]# ll -h
+				total 2.0M
+				-rw-r--r--. 1 root root 2.0M Jul 15 22:39 file1.data
+* You will check on Node 1, 2, 3 that file is disperse with parity.
+* 		ON NODE 1
+				[root@node1 ~]# cd /mnt/disk1/diskvol/gdisk5
+				[root@node1 gdisk5]# ll -h
+				total 1.1M
+				-rw-r--r--. 2 root root 1023K Jul 15 22:39 file1.data
+*               ON NODE 2
+				[root@node2 ~]# cd /mnt/disk1/diskvol/gdisk5
+				[root@node2 gdisk5]# ll
+				total 1028
+				-rw-r--r--. 2 root root 1047552 Jul 15 22:39 file1.data
+				[root@node2 gdisk5]# ll -h
+				total 1.1M
+				-rw-r--r--. 2 root root 1023K Jul 15 22:39 file1.data
+* 		ON NODE 3
+
+		                [root@node3 ~]# cd /mnt/disk1/diskvol/gdisk5
+		                [root@node3 gdisk5]# ll -h
+		                total 1.1M
+		                -rw-r--r--. 2 root root 1023K Jul 15 22:39 file1.data
+		
+		 		
+
+ 
