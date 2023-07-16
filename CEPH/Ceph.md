@@ -14,3 +14,5 @@
 *  Object storage: S3, Swift
 *  Block Storage: iSCSI
 *  File Storage: NFS
+*  Cephex is the The cephx protocol is enabled by default. Cryptographic authentication has some computational costs, though they are generally quite low.
+
