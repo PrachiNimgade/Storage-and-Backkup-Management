@@ -229,6 +229,8 @@
 		                [root@node3 gdisk5]# ll -h
 		                total 1.1M
 		                -rw-r--r--. 2 root root 1023K Jul 15 22:39 file1.data
+  		
+* Here, we are perform Replication, Disperse and Redundancy in GLUSTER-FS 
 		
 		 		
 
