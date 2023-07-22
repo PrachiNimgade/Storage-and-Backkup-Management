@@ -36,3 +36,19 @@ chmod -R 700 /bacula
 add host file `/etc/hosts`
 
 
+`vim /etc/bacula/bacula-dir.conf`
+                              Director {                            # define myself
+                                Name = bacula-dir
+                                DIRport = 9101                # where we listen for UA connections
+                                QueryFile = "/etc/bacula/query.sql"
+                                WorkingDirectory = "/var/spool/bacula"
+                                PidDirectory = "/var/run"
+                                Maximum Concurrent Jobs = 1
+                                Password = "cdac"         # Console password
+                                Messages = Daemon
+                                DirAddress= 192.168.206.166
+                              }
+
+
+
+                              
