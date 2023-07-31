@@ -1,0 +1,76 @@
+[root@master ~]# history
+    1  systemctl stop firewalld
+    2  systemctl disable firewalld
+    3  hostnamectl set-hostname master
+    4  yum install vim -y
+    5  vim /etc/selinux/config
+    6  reboot
+    7  ifup ens33
+    8  ip a
+    9  lsblk
+   10  fdisk /dev/sdb
+   13  mkfs.ext4 /dev/sdb1
+   14  mkdir /mnt/disk1
+   15  mount /dev/sdb1 /mnt/disk1
+   16  df -Th
+   22  yum install vim wget -y
+
+   23  wget --no-check-certificate -O /etc/yum.repos.d/beegfs.repo https://www.beegfs.io/release/beegfs_7.2/dists/beegfs-rhel7.repo
+
+   24  yum install beegfs-utils beegfs-client beegfs-meta beegfs-storage beegfs-mgmtd
+
+   25  mkdir -p /mnt/beegfs/meta && mkdir -p /mnt/beegfs/storage && mkdir -p /mnt/beegfs/beegfs_mgmtd
+
+   26  /opt/beegfs/sbin/beegfs-setup-mgmtd -p /mnt/beegfs/beegfs_mgmtd
+
+   29  vim /etc/beegfs/beegfs-client.conf
+			sysMgmtdHost = "your server VM IP"
+
+   30  systemctl start beegfs-mgmtd
+
+   31  systemctl enable beegfs-mgmtd
+
+   32  systemctl status beegfs-mgmtd
+
+
+   34  ls /opt/beegfs/
+
+   35  /opt/beegfs/sbin/beegfs-setup-meta -p /mnt/beegfs/meta -s 1 -m 192.168.206.164 (server ip)
+
+   36  systemctl start beegfs-meta
+   37  systemctl enable beegfs-meta
+   38  systemctl status beegfs-meta
+   39  history
+
+
+
+ON CLIENT 
+
+
+    1  hostnamectl set-hostname client
+    2  systemctl stop firewalld
+    3  systemctl disable firewalld
+    4  yum install vim -y
+    5  ifup ens33
+    6  yum install vim -y
+    7  vim /etc/selinux/config
+    8  ip a
+    9  vim /etc/hosts
+   10  init 6
+   11  yum install vim wget
+   12  wget --no-check-certificate -O /etc/yum.repos.d/beegfs.repo https://www.beegfs.io/release/beegfs_7.2/dists/beegfs-rhel7.repo
+   13  yum install -y kernel-devel beegfs-utils beegfs-client beegfs-mgmtd
+   14  /opt/beegfs/sbin/beegfs-setup-client -m 192.168.206.164
+				
+				[root@client ~]# /opt/beegfs/sbin/beegfs-setup-client -m 192.168.206.164
+						Updating config file: /etc/beegfs/beegfs-client.conf
+ 						* Setting management host: 192.168.206.164
+						All done.
+[root@client ~]# vim /etc/beegfs/beegfs-client.conf
+				
+				here, we can see already server ip is set
+
+   15  vim /etc/beegfs/beegfs-client.conf
+   16  systemctl start beegfs-client
+   
+			Due to some bugs beegfs-client service can't be start
